@@ -1,0 +1,87 @@
+{% extends "django_doge/base.html" %}
+
+{% load i18n %}
+{% load staticfiles %}
+{% load dict_lookup %}
+
+{% block title %}
+{% trans "Forum" %}
+{% endblock %}
+
+{% block head %}
+<link href="{% static 'forum/css/forum.css' %}" rel="stylesheet">
+<script src="{% static 'forum/js/forum.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+  <h1>{% trans "Forum" %}</h1>
+  {% if announcement %}
+  <p>{% trans "Announcement:" %} {{ announcement }}</p>
+  {% endif %}
+</div>
+<div class="page-header"></div>
+<div class="container-fluid" id="forum-main-container">
+  <div class="row">
+    <div class="col-sm-2">
+      <!-- left nav -->
+      <div id="forum-left-nav">
+        <div class="panel-group" id="accordion">
+          {% for parent_category in categories %}
+            <div class="panel panel-default">
+              <div class="panel-heading{% if parent_category == category or parent_category == category.sub_category %} nav-current{% endif %}">
+                <h3 class="panel-title">
+                  <a href="{% url 'forum:category' parent_category.id %}">
+                    {{ parent_category.title }}
+                  </a>
+                  {% if sub_categories|lookup:parent_category|length %}
+                  <a class="pull-right accordion-toggle{% if parent_category != category and parent_category != category.sub_category %} collapsed{% endif %}"
+                     data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ forloop.counter }}"></a>
+                  {% endif %}
+                </h3>
+              </div>
+              {% if sub_categories|lookup:parent_category|length %}
+              <div class="panel-collapse collapse{% if parent_category == category or parent_category == category.sub_category %} in{% endif %}"
+                   id="collapse-{{ forloop.counter }}">
+                <div class="panel-body">
+                {% for sub_category in sub_categories|lookup:parent_category %}
+                  <div class="sub_category{% if category == sub_category %} nav-current{% endif %}">
+                    <a href="{% url 'forum:category' sub_category.id %}">
+                      <small>{{ sub_category.title }}</small>
+                    </a>
+                  </div>
+                {% endfor %}
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <!-- end left nav -->
+    <div class="col-sm-8">
+      {% block forum_content %}
+      {% endblock %}
+    </div>
+    {% if followed_threads %}
+    <div class="col-sm-2">
+      <div id="followed">
+        <h2>{% trans "Followed threads" %}</h2>
+      </div>
+      <div class="btn-group-vertical">
+        {% for thread in followed_threads %}
+          <a href="{% url 'forum:thread' thread.id %}">
+            <button type="button" class="btn btn-default thread-button">
+              {{ thread.title }}
+              <br>
+              Last active : {{ thread.most_recent_post.created }}
+            </button>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+.top50 {
+    margin-top: 50px;
+}
+
+.user-picture, .doge-picture {
+    width: 150px;
+    height: 170px;
+}
+
+.business-card {
+    margin-top: 45px;
+    width: 100%;
+    height: auto;
+    background-color: #e8e8e8;
+
+    -moz-box-shadow: 0 0 3px #000;
+    -webkit-box-shadow: 0 0 3px#000;
+    box-shadow: 0 0 3px #000;
+}
+
+.public-header {
+    width: 100%;
+    height: 200px;
+    background: #f8f8f8;
+    background-position: 130px 70px;
+    float:left;
+    text-align: left;
+}
+
+.public-header img {
+    border-radius: 50%;
+    border: 4px solid transparent;
+    float: left;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 15px;
+}
+
+.public-header h1 {
+    font-size: 22px;
+    line-height: 20px;
+    margin-top: 40px;
+    margin-bottom: 0px;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+ul.list-style {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+}
+
+ul.list-style li {
+    list-style: none;
+}
+
+ul.list-style li i {
+    margin-top: 3px;
+}

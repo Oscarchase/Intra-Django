@@ -1,0 +1,62 @@
+{% extends "django_doge/base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load dict_lookup %}
+{% load widget_tweaks %}
+
+{% block head %}
+<link href="{% static 'auth/css/login.css' %}" rel="stylesheet">
+<script language="javascript">
+  var STATIC_URL = "{{ STATIC_URL|escapejs }}";
+</script>
+<script src="{% static 'auth/js/login.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+{% trans "Log in" %}
+{% endblock %}
+
+{% block content %}
+<div id="login-content">
+  {% if form.non_field_errors %}
+    <div class="center login-field alert alert-danger">
+    {% for err in form.non_field_errors %}
+      <p class="justified">{{ err }}</p>
+    {% endfor %}
+    </div>
+  {% elif request.GET.next and not form.errors and request.GET.next != '/' %}
+    <div class="center login-field alert alert-danger">
+      <p class="justified">{% trans "You must be logged in" %}</p>
+    </div>
+  {% endif %}
+  <form action="{% url 'auth:login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="post">
+    {% csrf_token %}
+    {% if request.GET.next %}
+      <input type="hidden" name="next" value="{{ request.GET.next }}">
+    {% endif %}
+    {% for field in form %}
+      <div class="center login-field input-group input-group-lg{% if field.name in form.errors %} has-error{% endif %}"
+            {% if field.name in form.errors %}data-container="body" data-toggle="popover" data-placement="right" data-content="{{ form.errors|errlookup:field.name }}"{% endif %}>
+        <span class="input-group-addon">
+        {% if field.name == form.username.name %}
+            <span class="glyphicon glyphicon-user"></span>
+        {% elif field.name == form.password.name %}
+            <span class="glyphicon glyphicon-lock"></span>
+        {% endif %}
+        </span>
+        {% render_field field|add_class:"form-control" tabindex=forloop.counter %}
+      </div>
+    <br>
+    {% endfor %}
+    <button type="submit" class="center input-group btn btn-default btn-lg" tabindex="{{ form.fields|length|add:1 }}">
+      {% trans "Log in" %}
+    </button>
+  </form>
+</div>
+{% endblock %}
+
+{% block breadcrumbs %}
+<li><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
+<li class="active">{% trans "Log in" %}</li>
+{% endblock %}

@@ -1,0 +1,214 @@
+{% extends "django_doge/base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load ticket_priority %}
+{% load dict_lookup %}
+{% load widget_tweaks %}
+
+{% block title %}
+{% trans "Tickets" %}
+{% endblock %}
+
+{% block head %}
+<link href="{% static 'tickets/css/tickets.css' %}" rel="stylesheet">
+<script src="{% static 'tickets/js/tickets.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<!-- jumbotron -->
+<div class="jumbotron">
+  <h1>{% trans "Tickets" %}</h1>
+  <p>{% trans "Having some trouble?<br>Just send a ticket and one of our super doges will take care of it." %}</p>
+  <p>
+    <a class="btn btn-primary btn-lg{% if user.is_superuser %} disabled{% endif %}" data-toggle="modal" data-target="#new-ticket-modal">
+      {% trans "Create a ticket" %}
+    </a>
+  </p>
+</div>
+<!-- end jumbotron -->
+<div class="page-header">
+  <h2>
+  {% if user.is_superuser %}
+    {% trans "Tickets assigned to you" %}
+  {% else %}
+    {% trans "My tickets" %}
+  {% endif %}
+  </h2>
+</div>
+<div>
+  <!-- tickets accordion -->
+  <div class="panel-group" id="accordion">
+  {% for ticket in tickets %}
+    <div class="panel panel-default">
+      <!-- panel heading -->
+      <div class="panel-heading panel-active-{{ ticket.is_active|lower }} clickable" data-parent="#accordion" data-toggle="collapse" data-target="#collapse-{{ ticket.id }}">
+        <div id="panel-content-{{ forloop.counter }}">
+          <div id="upper-toolbar">
+            <ul class="nav nav-pills">
+              <h2>
+                {{ ticket.title }}
+                <span class="label pull-right {{ ticket.priority|priority_class }}">
+                  {{ ticket.priority|priority_name }}
+                </span>
+              </h2>
+              <small>{% trans "Created:" %} {{ ticket.pub_date }}</small><br>
+              <small>
+              {% if user.is_superuser %}
+                {% trans "Author:" %} {{ ticket.author }}
+              {% else %}
+                {% trans "Assigned to:" %} {{ ticket.assigned_to }}
+              {% endif %}
+              </small>
+              <!-- actions -->
+              <li class="dropdown pull-right">
+                <form action="{% url 'tickets:activation' %}" method="post" role="menu" id="activate-ticket-{{ forloop.counter }}">
+                {% csrf_token %}
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span class="fa fa-cog fa-2x"></span>
+                  </a>
+                  <ul class="dropdown-menu pull-right">
+                    <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                    <li onclick="$('#activate-ticket-{{ forloop.counter }}').submit();">
+                      <a href="#">{% if ticket.is_active %} {% trans "Close ticket" %} {% else %} {% trans "Reopen ticket" %} {% endif %}</a>
+                    </li>
+                    {% if user.is_superuser %}
+                    <li onclick="$('#assign-ticket-id').val('{{ ticket.id }}')" data-toggle="modal" data-target="#superuser-modal">
+                      <a href="#">{% trans "Reassign" %}</a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </form>
+              </li>
+              <!-- end actions -->
+              <li class="ticket-spacing"></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- end panel heading -->
+      <div id="collapse-{{ ticket.id }}" class="panel-collapse collapse">
+        <div class="panel-body">
+        {% for response in responses|lookup:ticket %}
+          <div class="{% if response.author == user %}response-own{% else %}response-other{% endif %}">
+            <div class="panel-group">
+              <div class="panel panel-default">
+                <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapse-response-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                  <h4 class="panel-title">
+                    <small>
+                      {{ response.pub_date  }}
+                      <span class="response-author">
+                        {{ response.author }}
+                      </span>
+                    </small>
+                  </h4>
+                </div>
+                <div id="collapse-response-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="panel-collapse collapse in">
+                  <div class="panel-body">
+                    {{ response.response }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        {% if ticket.is_active %}
+          <!-- response form -->
+          <form action="{% url 'tickets:response' %}" method="post" id="form-reply-{{ forloop.counter0 }}">
+            <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+            {% csrf_token %}
+            {% for field in response_form %}
+              <div class="response-widget popover-collapse input-group" id="response-input-{{ forloop.parentloop.counter0 }}"
+                   data-container="body" data-toggle="popover" data-placement="left" data-content="{% trans 'This field is required' %}">
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-pencil"></span>
+                </span>
+                {% render_field field|add_class:"form-control" %}
+              </div>
+              <br>
+            {% endfor %}
+            <button type="submit" class="input-group btn btn-default pull-right" onclick="return validate_reply({{ forloop.counter0 }});">
+              {% trans "Send" %}
+            </button>
+          </form>
+          <!-- end response form -->
+        {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+  <!-- end tickets accordion -->
+  <!-- modal creation form -->
+  <div class="modal fade" id="new-ticket-modal" tabindex="-1" role="dialog" aria-labelledby="new-ticket-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="new-ticket-modal-label">{% trans "Create a new ticket" %}</h4>
+        </div>
+        <form action="{% url 'tickets:new' %}" method="post">
+          <div class="modal-body">
+          {% csrf_token %}
+          {% for field in creation_form %}
+            <div class="create-field {% if field.name == creation_form.problem.name %}problem-field {% endif %}input-group input-group-lg"
+                 data-container="body" data-toggle="popover" data-placement="right" data-content="{% trans 'This field is required' %}">
+              <span class="input-group-addon">
+                {% if field.name == creation_form.title.name %}
+                  <span class="fa fa-question fa-fw"></span>
+                {% elif field.name == creation_form.problem.name %}
+                  <span class="fa fa-file-text-o fa-fw"></span>
+                {% elif field.name == creation_form.priority.name %}
+                  <span class="fa fa-bomb fa-fw"></span>
+                {% endif %}
+              </span>
+              {% render_field field|add_class:"form-control" tabindex=forloop.counter %}
+            </div>
+            {% if not forloop.last %}
+            <div class="spacing"></div>
+            {% endif %}
+          {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" onclick="return validate_new_ticket();">{% trans "Create" %}</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- end modal creation form -->
+  <!-- modal superuser -->
+  <div class="modal fade" id="superuser-modal" tabindex="-1" role="dialog" aria-labelledby="superuser-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="superuser-modal-label">{% trans "Choose a superuser" %}</h4>
+        </div>
+        <form action="{% url 'tickets:reassign' %}" method="post">
+          <div class="modal-body">
+          {% csrf_token %}
+          <input type="hidden" name="ticket_id" value="" id="assign-ticket-id">
+          <select name="superuser">
+            {% for superuser in superusers %}
+              <option value="{{ superuser }}">{{ superuser }}</option>
+            {% endfor %}
+          </select>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">{% trans "Reassign" %}</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- end modal superuser -->
+</div>
+{% endblock %}
+
+{% block breadcrumbs %}
+  <li><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
+  <li class="active">{% trans "Tickets" %}</li>
+{% endblock %}

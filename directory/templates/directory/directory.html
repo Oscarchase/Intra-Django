@@ -1,0 +1,150 @@
+{% extends "django_doge/base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load request_params %}
+
+{% block head %}
+<link href="{% static 'directory/css/directory.css' %}" rel="stylesheet">
+<script language="javascript">
+  var STATIC_URL = "{{ STATIC_URL|escapejs }}";
+</script>
+<script src="{% static 'directory/js/directory.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+{% trans "LDAP" %}
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+  <h1>{% trans "Student directory" %}</h1>
+  <p>{% trans "browse student profiles through LDAP" %}</p>
+</div>
+<div class="page-header"></div>
+<div id="ldap-left-nav" class="col-3 container">
+  <!-- filter -->
+  <form action="{% url 'directory:index' %}" method="get">
+    <div class="input-group">
+      <input type="text" name="query" value="{{ request.GET.query }}" id="ldap-filter" class="form-control" placeholder="{% trans 'Filter' %}">
+      <span class="input-group-btn">
+        <button type="submit" class="btn btn-default">
+          <span class="glyphicon glyphicon-search"></span>
+        </button>
+      </span>
+    </div>
+  </form><br>
+  <!-- end filter -->
+  <small>
+    {% trans "Page" %} {{ current_page }}<br>
+    {{ user_start }} - {{ user_end }} / {{ user_count }} {% trans "doge users" %}
+    <!-- page -->
+    <ul class="pager small">
+      <li class="previous{% if user_start == 1 %} disabled{% endif %}">
+        <a href="{% if user_start == 1 %}#{% else %}{{ request.get_full_path|setpage:previous_page }}{% endif %}">
+          &larr; {% trans "Previous" %}
+        </a>
+      </li>
+      <li class="next{% if user_end == user_count %} disabled{% endif %}">
+        <a href="{% if user_end == user_count %}#{% else %}{{ request.get_full_path|setpage:next_page }}{% endif %}">
+          {% trans "Next" %} &rarr;
+        </a>
+      </li>
+    </ul>
+    <!-- end page -->
+    <!-- per page -->
+    <form action="{% url 'directory:index' %}" method="get">
+      {% if request.GET.sort %}
+        <input type="hidden" name="sort" value="{{ request.GET.sort }}">
+      {% endif %}
+      {% if request.GET.query %}
+        <input type="hidden" name="query" value="{{ request.GET.query }}">
+      {% endif %}
+      <span>{% trans "Results per page:" %}</span>
+      <div class="input-group spinner">
+        <input name="per_page" type="text" class="form-control" value="{{ per_page }}">
+        <div class="input-group-btn-vertical">
+          <button type="button" class="btn btn-default">
+            <i class="fa fa-caret-up"></i>
+          </button>
+          <button type="button" class="btn btn-default">
+            <i class="fa fa-caret-down"></i>
+          </button>
+        </div>
+        <button type="submit" class="btn btn-default form-control">{% trans "Ok" %}</button>
+      </div>
+    </form>
+    <!-- end per page -->
+  </small>
+</div>
+<div id="ldap-center" class="col-9 container-fluid">
+  <table class="table table-striped table-hover table-condensed table-bordered">
+    <!-- table header -->
+    <thead>
+      <tr>
+        <th>
+          <span class="fa fa-camera fa-fw"></span>
+          {% trans "Picture" %}
+          <a href="{% if request.GET.sort == 'picture' %}{{ request.get_full_path|setsort:'-picture' }}{% else %}{{ request.get_full_path|setsort:'picture' }}{% endif %}">
+            <span class="pull-right fa {% if request.GET.sort == 'picture' %}fa-sort-down{% elif request.GET.sort == '-picture' %}fa-sort-up{% else %}fa-sort{% endif %} fa-fw"></span>
+          </a>
+        </th>
+        <th>
+          <span class="fa fa-user fa-fw"></span>
+          {% trans "First Name" %}
+          <a href="{% if request.GET.sort == 'first_name' %}{{ request.get_full_path|setsort:'-first_name' }}{% else %}{{ request.get_full_path|setsort:'first_name' }}{% endif %}">
+            <span class="pull-right fa {% if request.GET.sort == 'first_name' %}fa-sort-down{% elif request.GET.sort == '-first_name' %}fa-sort-up{% else %}fa-sort{% endif %} fa-fw"></span>
+          </a>
+        </th>
+        <th>
+          <span class="fa fa-users fa-fw"></span>
+          {% trans "Last Name" %}
+          <a href="{% if request.GET.sort == 'last_name' %}{{ request.get_full_path|setsort:'-last_name' }}{% else %}{{ request.get_full_path|setsort:'last_name' }}{% endif %}">
+            <span class="pull-right fa {% if request.GET.sort == 'last_name' %}fa-sort-down{% elif request.GET.sort == '-last_name' %}fa-sort-up{% else %}fa-sort{% endif %} fa-fw"></span>
+          </a>
+        </th>
+        <th>
+          <span class="fa fa-tags fa-fw"></span>
+          {% trans "Login" %}
+          <a href="{% if request.GET.sort == 'login' %}{{ request.get_full_path|setsort:'-login' }}{% else %}{{ request.get_full_path|setsort:'login' }}{% endif %}">
+            <span class="pull-right fa {% if request.GET.sort == 'login' %}fa-sort-down{% elif request.GET.sort == '-login' %}fa-sort-up{% else %}fa-sort{% endif %} fa-fw"></span>
+          </a>
+        </th>
+        <th>
+          <span class="fa fa-envelope fa-fw"></span>
+          {% trans "Email" %}
+          <a href="{% if request.GET.sort == 'mail' %}{{ request.get_full_path|setsort:'-mail' }}{% else %}{{ request.get_full_path|setsort:'mail' }}{% endif %}">
+            <span class="pull-right fa {% if request.GET.sort == 'mail' %}fa-sort-down{% elif request.GET.sort == '-mail' %}fa-sort-up{% else %}fa-sort{% endif %} fa-fw"></span>
+          </a>
+        </th>
+        <th>
+          <span class="fa fa-mobile fa-fw fa-lg"></span>
+          {% trans "Mobile-phone" %}
+          <a href="{% if request.GET.sort == 'phone' %}{{ request.get_full_path|setsort:'-phone' }}{% else %}{{ request.get_full_path|setsort:'phone' }}{% endif %}">
+            <span class="pull-right fa {% if request.GET.sort == 'phone' %}fa-sort-down{% elif request.GET.sort == '-phone' %}fa-sort-up{% else %}fa-sort{% endif %} fa-fw"></span>
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <!-- end table header -->
+    <tbody>
+      {% for usr in users %}
+      <tr onclick="http_redirect('{% url 'profiles:user' usr.login %}')" class="{% if usr.user %}success{% elif not usr.picture or not usr.phone %}warning{% endif %}">
+        <td class="vert-align">{{ usr.picture_as_html|safe }}</td>
+        <td class="vert-align">{{ usr.first_name }}</td>
+        <td class="vert-align">{{ usr.last_name }}</td>
+        <td class="vert-align">{{ usr.login }}</td>
+        <td class="vert-align">{{ usr.mail }}</td>
+        <td class="vert-align">{{ usr.phone }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="clearfix"></div>
+{% endblock %}
+
+{% block breadcrumbs %}
+<li><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
+<li class="active">{% trans "LDAP" %}</li>
+{% endblock %}

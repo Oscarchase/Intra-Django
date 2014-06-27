@@ -1,0 +1,57 @@
+textarea.form-control {
+    resize: vertical;
+}
+
+.problem-field, #id_problem {
+    height: auto;
+}
+
+#id_priority {
+    height: 131px;
+}
+
+#id_response {
+    height: 80px;
+}
+
+.response-widget {
+    width: 45%;
+    margin-left: 55%;
+}
+
+.popover {
+    z-index: 12000;
+}
+
+.spacing {
+    height: 10px;
+}
+
+.ticket-spacing {
+    height: 100px;
+}
+
+.panel-default > .panel-active-true:hover {
+    background-color: rgba(223, 240, 216, .5);
+}
+
+.panel-default > .panel-active-false:hover {
+    background-color: rgba(242, 222, 222, .5);
+}
+
+.response-author {
+    float: right;
+}
+
+.response-own {
+    width: 45%;
+    margin-left: 55%;
+}
+
+.response-other {
+    width: 45%;
+}
+
+.clickable {
+    cursor: pointer;
+}

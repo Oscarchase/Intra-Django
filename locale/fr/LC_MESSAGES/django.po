@@ -1,0 +1,565 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-06-22 22:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: auth/forms.py:12
+msgid "Invalid login credentials"
+msgstr "Mauvaises informations de connexion"
+
+#: auth/templates/auth/login.html:17 auth/templates/auth/login.html.py:53
+#: auth/templates/auth/login.html:61
+msgid "Log in"
+msgstr "Se connecter"
+
+#: auth/templates/auth/login.html:30
+msgid "You must be logged in"
+msgstr "Vous devez être authentifié"
+
+#: auth/templates/auth/login.html:60
+#: directory/templates/directory/directory.html:148
+#: django_doge/templates/django_doge/base.html:8
+#: django_doge/templates/django_doge/index.html:11
+#: elearning/templates/elearning/index.html:91
+#: forum/templates/forum/categories.html:70
+#: forum/templates/forum/index.html:10 forum/templates/forum/threads.html:150
+#: modules/templates/modules/base_modules.html:77
+#: profiles/templates/profiles/profiles_view.html:145
+#: tickets/templates/tickets/index.html:212
+msgid "Home"
+msgstr "Accueil"
+
+#: autologin/views.py:15
+msgid "Invalid autologin token"
+msgstr "Jeton de connexion automatique invalide"
+
+#: autologin/views.py:36 tickets/views.py:45
+msgid "You are not a doge user"
+msgstr "Vous n'êtes pas un utilisateur doge"
+
+#: correcting/models.py:27
+msgid "A"
+msgstr "A"
+
+#: correcting/models.py:28
+msgid "B"
+msgstr "B"
+
+#: correcting/models.py:29
+msgid "C"
+msgstr "C"
+
+#: correcting/models.py:30
+msgid "D"
+msgstr "D"
+
+#: correcting/models.py:31
+msgid "FAILING"
+msgstr "ECHEC"
+
+#: directory/templates/directory/directory.html:16
+#: directory/templates/directory/directory.html:149
+#: django_doge/templates/django_doge/base.html:139
+msgid "LDAP"
+msgstr "LDAP"
+
+#: directory/templates/directory/directory.html:21
+msgid "Student directory"
+msgstr "Annuaire étudiant"
+
+#: directory/templates/directory/directory.html:22
+msgid "browse student profiles through LDAP"
+msgstr "Parcourez les profiles des étudiants via le LDAP"
+
+#: directory/templates/directory/directory.html:29
+msgid "Filter"
+msgstr "Filtre"
+
+#: directory/templates/directory/directory.html:39
+msgid "Page"
+msgstr "Page"
+
+#: directory/templates/directory/directory.html:40
+msgid "doge users"
+msgstr "utilisateurs doge"
+
+#: directory/templates/directory/directory.html:45
+msgid "Previous"
+msgstr "Précédente"
+
+#: directory/templates/directory/directory.html:50
+#: planning/templates/planning/planning.html:46
+msgid "Next"
+msgstr "Suivante"
+
+#: directory/templates/directory/directory.html:63
+msgid "Results per page:"
+msgstr "Résultats par page:"
+
+#: directory/templates/directory/directory.html:74
+msgid "Ok"
+msgstr "Ok"
+
+#: directory/templates/directory/directory.html:87
+msgid "Picture"
+msgstr "Photo"
+
+#: directory/templates/directory/directory.html:94
+msgid "First Name"
+msgstr "Prénom"
+
+#: directory/templates/directory/directory.html:101
+msgid "Last Name"
+msgstr "Nom de famille"
+
+#: directory/templates/directory/directory.html:108
+msgid "Login"
+msgstr "Login"
+
+#: directory/templates/directory/directory.html:115
+msgid "Email"
+msgstr "Adresse email"
+
+#: directory/templates/directory/directory.html:122
+msgid "Mobile-phone"
+msgstr "Numéro de téléphone"
+
+#: django_doge/settings.py:112
+msgid "English"
+msgstr "Anglais"
+
+#: django_doge/settings.py:113
+msgid "French"
+msgstr "Français"
+
+#: django_doge/templates/django_doge/base.html:48
+msgid "Languages"
+msgstr "Langues"
+
+#: django_doge/templates/django_doge/base.html:71
+msgid "dogelogin"
+msgstr "dogelogin"
+
+#: django_doge/templates/django_doge/base.html:83
+msgid "Administration"
+msgstr "Administration"
+
+#: django_doge/templates/django_doge/base.html:96
+msgid "Log out"
+msgstr "Déconnexion"
+
+#: django_doge/templates/django_doge/base.html:115
+#: modules/templates/modules/base_modules.html:8
+#: modules/templates/modules/base_modules.html:19
+#: modules/templates/modules/base_modules.html:78
+msgid "Modules"
+msgstr "Modules"
+
+#: django_doge/templates/django_doge/base.html:119
+#: planning/templates/planning/planning.html:7
+#: planning/templates/planning/planning.html:28
+msgid "Planning"
+msgstr "Planning"
+
+#: django_doge/templates/django_doge/base.html:123
+#: elearning/templates/elearning/index.html:8
+#: elearning/templates/elearning/index.html:19
+#: elearning/templates/elearning/index.html:92
+msgid "E-learning"
+msgstr "E-learning"
+
+#: django_doge/templates/django_doge/base.html:129
+#: forum/templates/forum/base.html:8 forum/templates/forum/base.html.py:18
+#: forum/templates/forum/categories.html:71
+#: forum/templates/forum/index.html:11 forum/templates/forum/threads.html:151
+#: modules/templates/modules/module.html:144
+msgid "Forum"
+msgstr "Forum"
+
+#: django_doge/templates/django_doge/base.html:133
+#: tickets/templates/tickets/index.html:10
+#: tickets/templates/tickets/index.html:21
+#: tickets/templates/tickets/index.html:213
+msgid "Tickets"
+msgstr "Tickets"
+
+#: elearning/templates/elearning/index.html:20
+msgid "Knowledge is power"
+msgstr "De la connaissance découle le pouvoir"
+
+#: forum/forms.py:13 tickets/forms.py:23
+msgid "Title"
+msgstr "Titre"
+
+#: forum/forms.py:14
+msgid "Post content"
+msgstr "Contenu"
+
+#: forum/forms.py:44
+msgid "Answer"
+msgstr "Répondre"
+
+#: forum/forms.py:66 forum/templates/forum/threads.html:50
+#: forum/templates/forum/threads.html:105
+msgid "Comment"
+msgstr "Commenter"
+
+#: forum/templates/forum/base.html:20
+msgid "Announcement:"
+msgstr "Annonce:"
+
+#: forum/templates/forum/base.html:70
+msgid "Followed threads"
+msgstr "Discussions suivies"
+
+#: forum/templates/forum/categories.html:12
+#: forum/templates/forum/categories.html:35
+msgid "Create a new thread"
+msgstr "Créer un nouveau sujet"
+
+#: forum/templates/forum/categories.html:42
+#: forum/templates/forum/threads.html:96
+#: forum/templates/forum/threads.html:129
+#: tickets/templates/tickets/index.html:122
+#: tickets/templates/tickets/index.html:155
+msgid "This field is required"
+msgstr "Ce champ est requis"
+
+#: forum/templates/forum/categories.html:58
+#: tickets/templates/tickets/index.html:173
+msgid "Create"
+msgstr "Créer"
+
+#: forum/templates/forum/categories.html:59
+#: forum/templates/forum/threads.html:106
+#: forum/templates/forum/threads.html:139
+#: modules/templates/modules/module.html:124
+#: profiles/templates/profiles/profiles_view.html:134
+#: tickets/templates/tickets/index.html:174
+#: tickets/templates/tickets/index.html:201
+msgid "Close"
+msgstr "Fermer"
+
+#: forum/templates/forum/threads.html:17
+msgid "Unfollow this thread"
+msgstr "Ne plus suivre ce sujet"
+
+#: forum/templates/forum/threads.html:19
+msgid "Follow this thread"
+msgstr "Suivre ce sujet"
+
+#: forum/templates/forum/threads.html:89
+msgid "Add a comment"
+msgstr "Ajouter un commentaire"
+
+#: forum/templates/forum/threads.html:114
+#: forum/templates/forum/threads.html:122
+msgid "Reply to this thread"
+msgstr "Répondre à ce sujet"
+
+#: forum/templates/forum/threads.html:138 tickets/forms.py:62
+msgid "Reply"
+msgstr "Répondre"
+
+#: modules/models.py:43
+msgid "project"
+msgstr "projet"
+
+#: modules/models.py:44
+msgid "exam"
+msgstr "examen"
+
+#: modules/models.py:45
+msgid "td"
+msgstr "td"
+
+#: modules/templates/modules/base_modules.html:20
+msgid "Want to work?<br>Manage your modules and activities here."
+msgstr "Vous voulez travailler?<br>Gérez vos modules et activités ici."
+
+#: modules/templates/modules/module.html:32
+msgid "This project must be realized by a team of"
+msgstr "Ce projet est à réaliser par groupe de"
+
+#: modules/templates/modules/module.html:32
+msgid "students"
+msgstr "étudiants"
+
+#: modules/templates/modules/module.html:33
+msgid "Places :"
+msgstr "Places :"
+
+#: modules/templates/modules/module.html:37
+msgid "Date of project : "
+msgstr "Dates du projet : "
+
+#: modules/templates/modules/module.html:38
+msgid "Start : "
+msgstr "Début : "
+
+#: modules/templates/modules/module.html:39
+msgid "End : "
+msgstr "Fin : "
+
+#: modules/templates/modules/module.html:41
+msgid "Subject"
+msgstr "Sujet"
+
+#: modules/templates/modules/module.html:52
+msgid "Unregister"
+msgstr "Se désinscrire"
+
+#: modules/templates/modules/module.html:54
+msgid "Manage Group"
+msgstr "Gérer le groupe"
+
+#: modules/templates/modules/module.html:61
+msgid "Registration is closed"
+msgstr "Les inscriptions sont closes"
+
+#: modules/templates/modules/module.html:63
+msgid "Activity is full"
+msgstr "L'activité est pleine"
+
+#: modules/templates/modules/module.html:65
+msgid "Register"
+msgstr "S'inscrire"
+
+#: modules/templates/modules/module.html:80
+msgid "Group Management"
+msgstr "Gestion du groupe"
+
+#: modules/templates/modules/module.html:99
+msgid "Add to group"
+msgstr "Ajouter au groupe"
+
+#: modules/templates/modules/module.html:128
+msgid "Destroy Group"
+msgstr "Dissoudre le groupe"
+
+#: modules/templates/modules/module.html:131
+msgid "Save changes"
+msgstr "Sauvergarder les changements"
+
+#: modules/templates/modules/module.html:141
+msgid "Groupes"
+msgstr "Groupes"
+
+#: modules/templates/modules/module.html:142
+msgid "My grades"
+msgstr "Mes notes"
+
+#: modules/templates/modules/module.html:143
+msgid "Grading"
+msgstr "Corrections"
+
+#: planning/templates/planning/planning.html:29
+msgid "Staying organized is the key to success"
+msgstr "Rester organisé, c'est la clé du succès"
+
+#: planning/templates/planning/planning.html:44
+msgid "Prev"
+msgstr "Précédente"
+
+#: planning/templates/planning/planning.html:45
+msgid "Today"
+msgstr "Aujourd'hui"
+
+#: planning/templates/planning/planning.html:49
+msgid "Year"
+msgstr "Année"
+
+#: planning/templates/planning/planning.html:50
+msgid "Month"
+msgstr "Mois"
+
+#: planning/templates/planning/planning.html:51
+msgid "Week"
+msgstr "Semaine"
+
+#: planning/templates/planning/planning.html:52
+msgid "Day"
+msgstr "Jour"
+
+#: profiles/templates/profiles/profiles_view.html:24
+msgid "A brilliant doge student"
+msgstr "Un brillant dogetudiant"
+
+#: profiles/templates/profiles/profiles_view.html:27
+msgid "Autologin"
+msgstr "Connexion automatique"
+
+#: profiles/templates/profiles/profiles_view.html:51
+#, python-format
+msgid "%(credits_acquired)s credits acquired, %(credits_progress)s in progress"
+msgstr "%(credits_acquired)s crédits acquis, %(credits_progress)s en cours"
+
+#: profiles/templates/profiles/profiles_view.html:68
+msgid "Activity"
+msgstr "Activité"
+
+#: profiles/templates/profiles/profiles_view.html:69
+msgid "Grade"
+msgstr "Note"
+
+#: profiles/templates/profiles/profiles_view.html:70
+msgid "Date"
+msgstr "Date"
+
+#: profiles/templates/profiles/profiles_view.html:71
+msgid "Grader"
+msgstr "Correcteur"
+
+#: profiles/templates/profiles/profiles_view.html:113
+msgid "Your autologin link"
+msgstr "Votre clé de connexion automatique"
+
+#: profiles/templates/profiles/profiles_view.html:121
+msgid "No autologin link yet"
+msgstr "Pas encore de clé de connexion automatique"
+
+#: profiles/templates/profiles/profiles_view.html:127
+msgid "Regenerate"
+msgstr "Regénération"
+
+#: profiles/templates/profiles/profiles_view.html:131
+msgid "Copy to clipboard"
+msgstr "Copier dans le presse-papier"
+
+#: tickets/forms.py:14 tickets/templatetags/ticket_priority.py:15
+msgid "Critical"
+msgstr "Critique"
+
+#: tickets/forms.py:15 tickets/templatetags/ticket_priority.py:16
+msgid "High"
+msgstr "Elevée"
+
+#: tickets/forms.py:16 tickets/templatetags/ticket_priority.py:17
+msgid "Normal"
+msgstr "Normale"
+
+#: tickets/forms.py:17 tickets/templatetags/ticket_priority.py:18
+msgid "Low"
+msgstr "Faible"
+
+#: tickets/forms.py:18 tickets/templatetags/ticket_priority.py:19
+msgid "Very Low"
+msgstr "Très faible"
+
+#: tickets/forms.py:26
+msgid "Problem"
+msgstr "Problème"
+
+#: tickets/templates/tickets/index.html:22
+msgid ""
+"Having some trouble?<br>Just send a ticket and one of our super doges will "
+"take care of it."
+msgstr ""
+"Vous avez un soucis?<br>Envoyez un ticket et un super admin doge s'occupera "
+"de vous."
+
+#: tickets/templates/tickets/index.html:25
+msgid "Create a ticket"
+msgstr "Créer un ticket"
+
+#: tickets/templates/tickets/index.html:33
+msgid "Tickets assigned to you"
+msgstr "Vos tickets assignés"
+
+#: tickets/templates/tickets/index.html:35
+msgid "My tickets"
+msgstr "Mes tickets"
+
+#: tickets/templates/tickets/index.html:55
+msgid "Created:"
+msgstr "Créé:"
+
+#: tickets/templates/tickets/index.html:58
+msgid "Author:"
+msgstr "Auteur:"
+
+#: tickets/templates/tickets/index.html:60
+msgid "Assigned to:"
+msgstr "Assigné à:"
+
+#: tickets/templates/tickets/index.html:73
+msgid "Close ticket"
+msgstr "Fermer le ticket"
+
+#: tickets/templates/tickets/index.html:73
+msgid "Reopen ticket"
+msgstr "Réouvrir le ticket"
+
+#: tickets/templates/tickets/index.html:77
+#: tickets/templates/tickets/index.html:200
+msgid "Reassign"
+msgstr "Réassigner"
+
+#: tickets/templates/tickets/index.html:131
+msgid "Send"
+msgstr "Envoyer"
+
+#: tickets/templates/tickets/index.html:148
+msgid "Create a new ticket"
+msgstr "Créer un nouveau ticket"
+
+#: tickets/templates/tickets/index.html:187
+msgid "Choose a superuser"
+msgstr "Choisir un super-utilisateur"
+
+#~ msgid "Unfollow"
+#~ msgstr "Ne plus suivre"
+
+#~ msgid "Follow"
+#~ msgstr "Suivre"
+
+#~ msgid "Profiles"
+#~ msgstr "Profiles"
+
+#~ msgid "Sub-categories :"
+#~ msgstr "Sous catégories :"
+
+#~ msgid "Threads :"
+#~ msgstr "Sujets :"
+
+#~ msgid "Categories :"
+#~ msgstr "Catégories :"
+
+#~ msgid "Login :"
+#~ msgstr "Login :"
+
+#~ msgid "First name :"
+#~ msgstr "Prénom :"
+
+#~ msgid "Last name :"
+#~ msgstr "Nom de famille :"
+
+#~ msgid "Email :"
+#~ msgstr "Adresse email :"
+
+#~ msgid "Phone :"
+#~ msgstr "Numéro de téléphone :"
+
+#~ msgid "Response"
+#~ msgstr "Réponse"
+
+#~ msgid "Priority"
+#~ msgstr "Priorité"
+
+#~ msgid "Submit"
+#~ msgstr "Soumettre"

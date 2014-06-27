@@ -1,0 +1,12 @@
+{% extends "django_doge/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="jumbotron">
+  <h1 class="center">Hello {{ user.first_name }} {{ user.last_name }}</h1>
+</div>
+{% endblock %}
+
+{% block breadcrumbs %}
+<li class="active">{% trans "Home" %}</li>
+{% endblock %}

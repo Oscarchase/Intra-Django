@@ -1,0 +1,73 @@
+{% extends "forum/base.html" %}
+
+{% load i18n %}
+{% load dict_lookup %}
+{% load widget_tweaks %}
+
+{% block forum_content %}
+<div class="jumbotron">
+  <h1>{{ category.title }}</h1><br>
+  <p>
+    <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#new-thread-modal">
+      {% trans "Create a new thread" %}
+    </a>
+  </p>
+</div>
+<div class="page-header"></div>
+<div class="container-fluid">
+  {% if sub_cat %}
+
+  {% endif %}
+  {% for thread in threads %}
+  <a class="thread-link" href="{% url 'forum:thread' thread.id %}">
+    <div class="thread well">
+      {{ thread.author.picture_as_html|safe }}
+      <span class="thread-title">&nbsp;{{ thread.title }}</span>
+    </div>
+  </a>
+  {% endfor %}
+  <!-- new thread modal -->
+  <div class="modal fade" id="new-thread-modal" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="modal-label">{% trans "Create a new thread" %}</h4>
+        </div>
+        <form action="{% url 'forum:new_thread' category.id %}" method="post">
+          <div class="modal-body">
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="create-field input-group input-group-lg{% if field.name == form.content.name %} post-content-field{% endif %}"
+                 data-container="body" data-toggle="popover" data-placement="right" data-content="{% trans 'This field is required' %}">
+              <span class="input-group-addon">
+                {% if field.name == form.title.name %}
+                  <span class="fa fa-question fa-fw"></span>
+                {% else %}
+                  <span class="fa fa-file-text-o fa-fw"></span>
+                {% endif %}
+              </span>
+                {% render_field field|add_class:"form-control" tabindex=forloop.counter %}
+            </div>
+            {% if not forloop.last %}
+            <br>
+            {% endif %}
+          {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" onclick="return validate_new_thread();">{% trans "Create" %}</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- end new thread modal -->
+</div>
+{% endblock %}
+
+{% block breadcrumbs %}
+<li><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
+<li><a href="{% url 'forum:index' %}">{% trans "Forum" %}</a></li>
+<li class="active">{{ category.title }}</li>
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends 'modules/base_modules.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block head %}
+<link href="{% static 'modules/css/modules.css' %}" rel="stylesheet">
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  var registered = {{ activity.registered.count }}
+  var places = {{ activity.places }}
+  var registerEnd = new Date("{{ activity.register_end.isoformat }}")
+  var group_size = {{ activity.group_size }}
+  var group_members = ['{{ doge_user }}']
+  {% for member in cur_group.group_members.all %}
+  {% if member != doge_user %}
+    group_members.push('{{ member }}')
+  {% endif %}
+  {% endfor %}
+</script>
+<script src="{% static 'modules/js/modules.js' %}"></script>
+<script src="{% static 'modules/js/activity_graph.js' %}"></script>
+<script src="{% static 'modules/js/count_down.js' %}"></script>
+{% endblock %}
+
+{% block base_modules_content %}
+<div class="jumbotron jumbo-acti">
+  <!-- description -->
+  <h1>[{{ activity.name }}]</h1><br>
+  <p class="description-acti container-fluid">{{ activity.description }}</p><br>
+  <div class="row">
+    <div class="col-sm-4">
+      <p>{% trans "This project must be realized by a team of" %} {{ activity.group_size }} {% trans "students" %}</p>
+      <p>{% trans "Places :" %} {{ activity.places }}</p>
+      <div id="piechart"></div>
+    </div>
+    <div class="col-sm-4 pull-right">
+      <p>{% trans "Date of project : " %}</p>
+      <p>{% trans "Start : "%}{{ activity.start }}</p>
+      <p>{% trans "End : "%}{{ activity.end }}</p>
+      {% if activity.subject %}
+      <a class="btn btn-info btn-lg" href="{{ MEDIA_URL }}{{ activity.subject }}">{% trans "Subject" %}</a>
+      {% endif %}
+    </div>
+  </div>
+  <!-- end description -->
+  <!-- registration -->
+  <div class="center">
+  {% if doge_user in activity.registered.all %}
+    <a class="btn btn-warning btn-lg"
+    {% if activity.group_size == 1 %}href="{% url 'modules:unregister' module.name activity.name %}"{% else %}data-toggle="modal" data-target="#group-modal" {% endif %}>
+    {% if activity.group_size == 1 %}
+      {% trans "Unregister" %}
+    {% else %}
+      {% trans "Manage Group" %}
+    {% endif %}
+    </a>
+  {% else %}
+    <a id="register-button" class="btn btn-primary btn-lg{% if not activity.can_register %} disabled{% endif %}"
+      {% if activity.group_size == 1 %}href="{% url 'modules:register' module.name activity.name %}"{% else %}data-toggle="modal" data-target="#group-modal" {% endif %}>
+    {% if activity.is_closed_for_registration %}
+      {% trans "Registration is closed" %}
+    {% elif activity.is_full %}
+      {% trans "Activity is full" %}
+    {% else %}
+      {% trans "Register" %}
+    {% endif %}
+    </a>
+    {% if activity.can_register %}
+    <br><br><div class="center" id="countdown"></div>
+    {% endif %}
+  {% endif %}
+  </div>
+  <!-- end registration -->
+  <!-- modal group -->
+  <div class="modal fade" id="group-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">{% trans "Group Management" %}</h4>
+        </div>
+        <form id="group-member-register" method="post">
+          {% csrf_token %}
+          <div class="modal-body">
+            <div class="input-group">
+              <span class="input-group-addon">
+                <span class="fa fa-child"></span>
+              </span>
+              <input type="text" name="group_name" class="form-control" placeholder="Group Name"
+              {% if doge_user in activity.registered.all %}value="{{ cur_group.name }}" {% else %}value="{{ activity.name }} {{ doge_user }}"{% endif %}>
+            </div>
+              <br>
+            <select id="user_selection" class="form-control input-sm">
+              {% for user in registered_users %}
+                <option value="{{ user }}">{{ user }}</option>
+              {% endfor %}
+            </select>
+              <br>
+            <button type="button" class="btn btn-info pull-right" onclick="add_to_group()">{% trans "Add to group" %}</button>
+              <br>
+            <table id="members-table" class="table table-striped" style="width:100%;margin-top:30px;">
+              <tbody>
+              {% if doge_user in activity.registered.all %}
+                {% for member in cur_group.group_members.all %}
+                  {% if member != doge_user %}
+                    <tr>
+                      <td>
+                        <span class="user-picture">{{ member.picture_as_html|safe }}</span>
+                      </td>
+                      <td>
+                        <a href="/profiles/{{ member }}" target="_blank">{{ member }}</a>
+                      </td>
+                      <td>
+                        <button type="button" class="close pull-right" onclick="remove_member(this, '{{ member }}')">&times;</button>
+                      </td>
+                    </tr>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+            {% if cur_group %}
+            <input type="hidden" name="group_name" value="{{ cur_group.name }}">
+            <button type="submit" class="btn btn-danger"
+            onclick="$('#group-member-register').attr('action', '{% url 'modules:unregister' module.name|urlencode activity.name|urlencode %}')">{% trans "Destroy Group" %}</button>
+            {% endif %}
+            <button type="submit" class="btn btn-success"
+            onclick="$('#group-member-register').attr('action', '{% url 'modules:register' module.name|urlencode activity.name|urlencode %}')">{% trans "Save changes" %}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- end modal group -->
+</div>
+<div class="page-header"></div>
+<div class="btn-group pull-right">
+  <button type="button" class="btn btn-primary">{% trans "Groupes" %}</button>
+  <button type="button" class="btn btn-primary">{% trans "My grades" %}</button>
+  <button type="button" class="btn btn-primary">{% trans "Grading" %}</button>
+  <button type="button" class="btn btn-primary">{% trans "Forum" %}</button>
+</div>
+{% endblock %}

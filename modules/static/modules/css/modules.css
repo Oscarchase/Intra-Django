@@ -1,0 +1,37 @@
+.panel a {
+    color:#777;
+}
+
+.panel a:hover {
+    text-decoration:none;
+    color:#222;
+}
+
+.panel .table td {
+    border-color: #f3f3f3;
+}
+
+.jumbo-acti {
+    background-color: #b9b9b9;
+}
+
+.description-acti {
+    border-radius: 10px;
+    box-shadow: -5px -5px 5px #9d9ea6;
+    background-color: #c8c5c2;
+}
+
+#modules-left-nav.affix {
+    top: 70px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.nav-current {
+    background-color: rgba(223, 240, 216, 1) !important;
+}
+
+.user-picture {
+    height: 50%;
+    width: auto;
+}

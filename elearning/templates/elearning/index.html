@@ -1,0 +1,93 @@
+{% extends "django_doge/base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load dict_lookup %}
+
+{% block title %}
+{% trans "E-learning" %}
+{% endblock %}
+
+{% block head %}
+<link href="{% static 'elearning/css/elearning.css' %}" rel="stylesheet">
+<script src="{% static 'elearning/js/elearning.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<!-- jumbotron -->
+<div class="jumbotron">
+  <h1>{% trans "E-learning" %}</h1>
+  <p>{% trans "Knowledge is power" %}</p>
+</div>
+<!-- end jumbotron -->
+<div class="page-header"></div>
+<div class="container-fluid" id="elearning-main-container">
+  <div class="row">
+    <div class="col-sm-2">
+      <!-- left nav -->
+      <div id="elearning-left-nav">
+        <div class="panel-group" id="accordion">
+          {% for module in modules %}
+            <div class="panel panel-default">
+              <div class="panel-heading{% if activity.module == module %} nav-current{% endif %}">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ forloop.counter }}">
+                    <span class="fa fa-fw fa-hdd-o"></span>
+                    {{ module.name }}
+                  </a>
+                </h4>
+              </div>
+              <div id="collapse-{{ forloop.counter }}" class="panel-collapse collapse{% if activity.module == module %} in{% endif %}">
+                <div class="panel-body">
+                  <table class="table">
+                    <tbody>
+                      {% for activity in activities|lookup:module %}
+                        <tr>
+                          <td>
+                            <a href="{% url 'e-learning:activity' activity.name|urlencode %}">
+                              <span class="fa fa-fw {% if activity.type == 0 %}fa-folder-open{% elif activity.type == 1 %}fa-keyboard-o{% elif activity.type == 2 %}fa-pencil{%endif%}"></span>
+                              {{ activity.name }}
+                            </a>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <!-- end left nav -->
+    </div>
+    <div class="col-sm-8">
+    {% if activity %}
+      <div class="jumbotron">
+        <h1>{{ activity.name }}</h1>
+        <p>{{ activity.description }}</p>
+      </div>
+    {% endif %}
+    <!-- center content -->
+    {% for res in resources %}
+      <div class="page-header">
+        <h2>{{ res.title }}</h2>
+      </div>
+      {% if '.pdf' in res.file.url %}
+      <embed src="{{ MEDIA_URL }}{{ res.file }}" width="100%" height="700">
+      {% else %}
+      <video width="100%" controls>
+         <source src="{{ MEDIA_URL }}{{ res.file }}" type="video/mp4">
+      </video>
+      {% endif %}
+    {% endfor %}
+    </div>
+    <!-- end center content -->
+  </div>
+</div>
+{% endblock %}
+
+{% block breadcrumbs %}
+<li><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
+<li class="active">{% trans "E-learning" %}</li>
+{% endblock %}

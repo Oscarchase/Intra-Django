@@ -1,0 +1,20 @@
+.panel a {
+    color:#777;
+}
+
+.panel a:hover {
+    text-decoration:none;
+    color:#222;
+}
+
+.panel .table td {
+    border-color: #f3f3f3;
+}
+
+#elearning-left-nav.affix {
+    top: 70px;
+}
+
+.nav-current {
+    background-color: rgba(223, 240, 216, 1) !important;
+}

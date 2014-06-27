@@ -1,0 +1,147 @@
+{% extends "django_doge/base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load dict_lookup %}
+{% load ranking %}
+
+{% block title %}
+{{ doge_user.login }}
+{% endblock %}
+
+{% block head %}
+<link href="{% static 'profiles/css/profiles.css' %}" rel="stylesheet">
+<script src="{% static 'profiles/js/ZeroClipboard.min.js' %}"></script>
+<script language="javascript">
+  var STATIC_URL = "{{ STATIC_URL|escapejs }}";
+</script>
+<script src="{% static 'profiles/js/profiles.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+  <h1>{{ doge_user.first_name }} {{ doge_user.last_name }}</h1>
+  <p>{% trans "A brilliant doge student" %}</p>
+  {% if user == doge_user.user %}
+  <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#autologin-modal">
+    {% trans "Autologin" %}
+  </a>
+  {% endif %}
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="business-card">
+        <div class="public-header">
+          {{ doge_user.picture_as_html|safe }}
+          <h1>{{ doge_user.first_name }} {{ doge_user.last_name }}</h1>
+          <p>{{ doge_user.login }}</p>
+        </div>
+        <ul class="list-style">
+          <li><i class="fa fa-envelope"></i> {{ doge_user.mail }}</li>
+          {% if doge_user.phone %}
+          <li><i class="glyphicon glyphicon-phone"></i> {{ doge_user.phone }}</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-9">
+      <div id="grade-panel" class="container-fluid">
+        <div class="page-header">
+          <h3>{% blocktrans %}{{ credits_acquired }} credits acquired, {{ credits_progress }} in progress{% endblocktrans %}</h3>
+        </div>
+        <div class="row">
+          {% for module in modules %}
+          <div class="col-sm-6">
+            <div class="panel {{ ranks|lookup:module|rank_panel_class }}">
+              <div class="panel-heading clickable" data-toggle="collapse" data-target="#collapse-{{ module.id }}">
+                {{ module.name }}
+                {% if ranks|lookup:module %}
+                  <span class="badge pull-right">{{ ranks|lookup:module|rank_str }}</span>
+                {% endif %}
+              </div>
+              <div id="collapse-{{ module.id }}" class="panel-collapse collapse">
+                <div class="panel-body">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                      <th>{% trans "Activity" %}</th>
+                      <th>{% trans "Grade" %}</th>
+                      <th>{% trans "Date" %}</th>
+                      <th>{% trans "Grader" %}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for activity in activities|lookup:module %}
+                      <tr>
+                        <td>
+                          <a href="{% url 'modules:module' module.name|urlencode activity.name|urlencode %}">
+                            {{ activity.name }}
+                          </a>
+                        </td>
+                        {% with grades|lookup:activity as grade %}
+                        {% if grade %}
+                        <td>{{ grade.value }}</td>
+                        <td>{{ grade.date|date:"F g, Y" }}</td>
+                        <td>
+                          <a href="{% url 'profiles:user' grade.grader.login %}">
+                            {{ grade.grader.login }}
+                          </a>
+                        </td>
+                        {% endif %}
+                        {% endwith %}
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if user == doge_user.user %}
+  <!-- autologin modal -->
+  <div class="modal fade" id="autologin-modal" tabindex="-1" role="dialog" aria-labelledby="autologin-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">{% trans "Your autologin link" %}</h4>
+        </div>
+        <div class="modal-body">
+          <div class="well">
+            <small>
+            {% if doge_user.autologin %}
+              {{ request.get_host }}{% url 'autologin:autologin' doge_user.autologin %}
+            {% else %}
+              {% trans "No autologin link yet" %}
+            {% endif %}
+            </small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class="btn btn-primary" href="{% url 'autologin:regenerate' %}?next={% url 'profiles:user' doge_user.login %}#autologin">{% trans "Regenerate" %}</a>
+          {% if doge_user.autologin %}
+          <button type="button" id="copy-button" class="btn btn-primary" data-dismiss="modal"
+                  data-clipboard-text="{{ request.get_host }}{% url 'autologin:autologin' doge_user.autologin %}">
+            {% trans "Copy to clipboard" %}
+          </button>
+          {% endif %}
+          <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end autologin modal -->
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block breadcrumbs %}
+<li><a href="{% url 'index' %}">{% trans "Home" %}</a></li>
+<li class="active">{{ doge_user.login }}</li>
+{% endblock %}

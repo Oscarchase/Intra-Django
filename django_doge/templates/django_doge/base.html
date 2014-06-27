@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% load i18n %}
+    {% load static %}
+    <title>
+    {% block title %}
+      {% trans "Home" %}
+    {% endblock %}
+    </title>
+    <link href="{% static 'django_doge/img/doge.png' %}" rel="icon">
+    <link href="{% static 'django_doge/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'django_doge/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'django_doge/css/base.css' %}" rel="stylesheet">
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="{% static 'django_doge/js/bootstrap.min.js' %}"></script>
+    {% block head %}
+    {% endblock %}
+  </head>
+  <body>
+    <header>
+      <!-- top navbar -->
+      <nav class="navbar navbar-default navbar-fixed-top" id="top-nav" role="navigation">
+        <div class="container-fluid">
+          <!-- nav header -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'index' %}">
+              <img id="doge-index" src="{% static 'django_doge/img/doge.png' %}">
+            </a>
+          </div>
+          <!-- end nav header -->
+          <div class="navbar-collapse collapse">
+            <!-- i18n handling -->
+            <form action="{% url 'set_language' %}" method="post" id="lang-form">
+              {% csrf_token %}
+              <input name="next" type="hidden" value="{{ request.path }}">
+              <input name="language" type="hidden" id="lang-value">
+              <!-- nav left align -->
+              <ul class="nav navbar-nav navbar-left">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-flag fa-lg fa-fw"></i>
+                    {% trans "Languages" %}
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                      <li {% if language.code == LANGUAGE_CODE %} class="disabled"{% endif %}>
+                        <a href="#" onclick="$('#lang-value').val('{{ language.code }}');$('#lang-form').submit();">
+                          {{ language.name_local|title }}
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </li>
+              </ul>
+              <!-- end nav left align -->
+            </form>
+            <!-- end i18n handlin -->
+            <!-- nav right align -->
+            <ul class="nav navbar-nav navbar-right">
+              <li>
+                <form class="navbar-form navbar-left" action="{% url 'profiles:index' %}" role="search" method="get">
+                  <div class="form-group">
+                    <input name="query" type="text" class="form-control" placeholder="{% trans 'dogelogin' %}">
+                  </div>
+                  <button type="submit" class="btn btn-default">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </button>
+                </form>
+              </li>
+              {% if user.is_authenticated %}
+                {% if user.is_superuser %}
+                  <li>
+                    <a href="{% url 'admin:index' %}" target="_blank">
+                      <i class="fa fa-wrench fa-lg fa-fw"></i>
+                      {% trans "Administration" %}
+                    </a>
+                  </li>
+                {% endif %}
+                <li>
+                  <a href="{% url 'profiles:user' user.username %}">
+                    <i class="fa fa-user fa-lg fa-fw"></i>
+                    {{ user.username }}
+                  </a>
+                </li>
+                <li>
+                  <a href="{% url 'auth:logout' %}">
+                    <i class="fa fa-power-off fa-lg fa-fw"></i>
+                    {% trans "Log out" %}
+                  </a>
+                </li>
+              {% endif %}
+            </ul>
+            <!-- end nav right align -->
+          </div>
+        </div>
+      </nav>
+      <!-- end top navbar -->
+    </header>
+    <!-- main -->
+    <div id="main-container">
+      <div id="left-container">
+        <!-- left navbar -->
+        <div class="list-group" id="left-nav">
+          <br>
+          <a href="{% url 'modules:index' %}" class="list-group-item">
+            <span class="glyphicon glyphicon-hdd fa-lg fa-fw"></span>
+            &nbsp; {% trans "Modules" %}
+          </a><br>
+          <a href="{% url 'planning:index' %}" class="list-group-item">
+            <span class="fa fa-calendar fa-lg fa-fw"></span>
+            &nbsp; {% trans "Planning" %}
+          </a><br>
+          <a href="{% url 'e-learning:index' %}" class="list-group-item">
+            <span class="fa fa-desktop fa-lg fa-fw"></span>
+            &nbsp; {% trans "E-learning" %}
+          </a>
+          <div class="page-header"></div>
+          <br>
+          <a href="{% url 'forum:index' %}" class="list-group-item">
+            <span class="fa fa-wechat fa-lg fa-fw"></span>
+            &nbsp; {% trans "Forum" %}
+          </a><br>
+          <a href="{% url 'tickets:index' %}" class="list-group-item">
+            <span class="fa fa-user-md fa-lg fa-fw"></span>
+            &nbsp; {% trans "Tickets" %}
+          </a>
+          <div class="page-header"></div>
+          <br>
+          <a href="{% url 'directory:index' %}" class="list-group-item">
+            <span class="fa fa-book fa-lg fa-fw"></span>
+            &nbsp; {% trans "LDAP" %}
+          </a>
+        </div>
+        <!-- end left navbar -->
+      </div>
+      <div id="right-container">
+        {% block content-right %}
+        {% endblock %}
+      </div>
+      <div id="center-container">
+        <div class="container-fluid">
+          {% block content %}
+          {% endblock %}
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <!-- end main -->
+    <footer>
+      <nav class="navbar navbar-fixed-bottom" role="navigation">
+        <!-- breadcrumbs -->
+        <ol class="breadcrumb">
+          {% block breadcrumbs %}
+          {% endblock %}
+        </ol>
+        <!-- end breadcrumbs -->
+      </nav>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+{% extends "django_doge/base.html" %}
+
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %}
+{% trans "Planning" %}
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'planning/css/calendar.min.css' %}">
+<link rel="stylesheet" href="{% static 'planning/css/planning.css' %}">
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+<script src="{% static 'planning/js/calendar.min.js' %}"></script>
+<script type="text/javascript">
+  var STATIC_URL = '{{ STATIC_URL|escapejs }}';
+  var LANGUAGE_CODE = '{{ LANGUAGE_CODE|escapejs }}';
+  var EVENT_URL = '{% url "planning:data" %}';
+</script>
+<script src="{% static 'planning/js/planning.js' %}"></script>
+<!-- languages files -->
+<script src="{% static 'planning/js/language/fr.js' %}"></script>
+<!-- end languages files -->
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+  <h1>{% trans "Planning" %}</h1>
+  <p>{% trans "Staying organized is the key to success" %}</p>
+</div>
+<div class="page-header"></div>
+<div class="container-fluid">
+  <div class="row">
+    <span class="col-sm-1"></span>
+    <!-- content -->
+    <div class="col-sm-11">
+      <!-- navigation -->
+      <div class="row">
+        <div class="col-sm-8">
+          <h2 id="calendar-title"></h2>
+        </div>
+        <div class="pull-right">
+          <div class="btn-group">
+            <button class="btn btn-primary" data-calendar-nav="prev">&lt;&lt; {% trans "Prev" %}</button>
+            <button class="btn btn-default" data-calendar-nav="today">{% trans "Today" %}</button>
+            <button class="btn btn-primary" data-calendar-nav="next">{% trans "Next" %} &gt;&gt;</button>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-warning" data-calendar-view="year">{% trans "Year" %}</button>
+            <button class="btn btn-warning" data-calendar-view="month">{% trans "Month" %}</button>
+            <button class="btn btn-warning" data-calendar-view="week">{% trans "Week" %}</button>
+            <button class="btn btn-warning" data-calendar-view="day">{% trans "Day" %}</button>
+          </div>
+        </div>
+      </div>
+      <!-- end navigation -->
+      <div class="calendar-nav-spacing"></div>
+      <div id="calendar"></div>
+    </div>
+    <!-- end content -->
+  </div>
+</div>
+{% endblock %}
